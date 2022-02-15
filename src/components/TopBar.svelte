@@ -39,7 +39,7 @@ $:title = `${$courseID} / ${$subjectID}`
 }
 .lesson{
   padding: 5px;
-  width: 40%;
+  width: 35%;
   background-color: purple;
   border-radius: 4px;
   cursor: pointer;
@@ -51,7 +51,7 @@ $:title = `${$courseID} / ${$subjectID}`
 .theme{
   background-color: green;
   border-radius: 4px;
-  width: 60%;
+  width: 65%;
   margin-left: 5px;
 
 }

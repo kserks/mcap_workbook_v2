@@ -12,7 +12,7 @@ $:content = (()=>{
 
 </script>
 
-<div class="component">
+<div class="content">
   <div class="content__header">
     <div class="content__index">{$note.index}</div>
     <div class="content__title">{$note.name}</div>
@@ -28,12 +28,12 @@ $:content = (()=>{
 
 <style scoped>
 
-.component{
+.content{
   padding: 5px;
   padding-top: 0;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 65%;
   height: 100%;
   color: gray;
 }

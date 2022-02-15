@@ -122,3 +122,8 @@ li.active{
 	background-color: deepskyblue;
 	color: white;
 }
+
+input{
+	border: unset;
+	outline: 0;
+}
