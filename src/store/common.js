@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 
-export let screenIndex = writable(0)
+export let screenIndex = writable(0) 
 export let courseID = writable('')
 export let subjectID = writable('')
 export let courseTitle = writable('')

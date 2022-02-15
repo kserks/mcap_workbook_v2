@@ -1,8 +1,7 @@
 <script>
 import { notes, note } from '../../store/common.js'
-import marked from '../../lib/marked.js'
+import marked from '../../utils/marked.js'
 import base64 from '../../utils/base64.js'
-//marked.parse('# Marked in the browser\n\nRendered by **marked**.');
 
 
 
@@ -19,7 +18,12 @@ $:content = (()=>{
     <div class="content__title">{$note.name}</div>
   </div>
   <div class="content__markdown">{@html content}</div>
-  <div class="content__control"></div>
+  <div class="content__control">
+      <div class="btn">Скрыть</div>
+      <div class="btn">Востановить</div>
+      <div class="btn">Изменить</div>
+      <div class="btn mark">4</div>
+  </div>
 </div>
 
 <style scoped>
@@ -62,5 +66,16 @@ $:content = (()=>{
   padding: 5px;
 }
 
+.content__control{
+  display: flex;
+  justify-content: space-between;
+}
+.content__control .btn{
+  width: 24%;
 
+}
+.content__control .btn.mark{
+  background-color: darkgreen;
+  pointer-events: none;
+}
 </style>

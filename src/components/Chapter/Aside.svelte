@@ -1,8 +1,10 @@
 <script>
 import { notes, note } from '../../store/common.js'
 
-function selectNote (item){
+function selectNote (item, index){
   $note = item
+  $notes.forEach(item=>item.active = false)
+  $notes[index].active = true
 }
 
 </script>
@@ -10,7 +12,7 @@ function selectNote (item){
 <div class="component">
   <ul>
         {#each $notes as item, index}
-            <li class="item" on:mousedown={()=>{selectNote(item)}}>{item.name}</li>
+            <li class="item {item.active?'active':''}" on:mousedown={()=>{selectNote(item, index)}}>{item.order}. {item.name}</li>
         {/each}
   </ul>
 

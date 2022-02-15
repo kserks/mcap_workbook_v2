@@ -85,14 +85,40 @@ li{
 	color: gray;
   border-radius: 4px;
   font-size: 16px;
+	cursor: pointer;
 }
 li.item:hover{
-	background-color: rgba(0,0,0,0.5);
-	cursor: pointer;
+	background-color: deepskyblue;
 	color: white;
+
+
 }
 
 .component .content__markdown p img{
   max-width: 100% !important;
+  margin: 10px 0;
+}
 
+p{
+	margin: 0;
+}
+
+.btn{
+	border-radius: 4px;
+	background-color: #555;
+	color: gray;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	height: 27px;
+}
+.btn:hover{
+	color: white;
+	background-color: #333;
+}
+
+li.active{
+	background-color: deepskyblue;
+	color: white;
 }
