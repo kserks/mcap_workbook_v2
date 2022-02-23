@@ -88,8 +88,8 @@ li{
 	cursor: pointer;
 }
 li.item:hover{
-	background-color: deepskyblue;
-	color: white;
+	background-color: rgba(0,0,0,0.5);
+	color: cadetblue;
 
 
 }
@@ -114,16 +114,17 @@ p{
 	height: 27px;
 }
 .btn:hover{
-	color: white;
-	background-color: #333;
+	background-color: rgba(0,0,0,0.5);
+	color: cadetblue;
 }
 
 li.active{
-	background-color: deepskyblue;
-	color: white;
+	background-color: rgba(0,0,0,0.5);
+	color: cadetblue;
 }
-
+textarea,
 input{
 	border: unset;
 	outline: 0;
+
 }

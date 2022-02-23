@@ -1,12 +1,15 @@
 <script>
-import { notes, note } from '../../store/common.js'
+import { notes, note, screenID } from '../../store/common.js'
 import Control from './Control.svelte'
 
+
 function selectNote (item, index){
-  $note = item
-  $notes.forEach(item=>item.active = false)
-  $notes[index].active = true
+  $note = item;
+  $notes.forEach(item=>item.active = false);
+  $notes[index].active = true;
+  $screenID = 'NoteView';
 }
+
 
 </script>
 

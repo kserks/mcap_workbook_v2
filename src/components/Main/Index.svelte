@@ -1,6 +1,12 @@
 <script>
 import { screenIndex, courseID, subjectID, courseTitle, subjectTilte, notes, player } from '../../store/common.js'
-import query from '../../utils/query.js'
+import api from '../../utils/api.js'
+import { onMount } from 'svelte';
+import getPlayerName from '../../methods/get-player.js';
+
+onMount(async ()=>{
+  $player = await getPlayerName()
+})
 
 let courses = []
 let subjects = []
@@ -8,7 +14,7 @@ let subjects = []
  * Получаем массив курсов
  */
 
-fetch(query.courses())
+fetch(api.courses())
   .then(r=>r.json())
   .then(r=>{
       courses = r.items.map(item=>{
@@ -28,17 +34,20 @@ function selectCourse(item, index){
   courses.forEach(item=>item.active=false)
   // навешиваем класс active на выбранный элемент
   courses[index].active = true
+  // Сбрасываем тему, что бы при повторном выборе курса не было не актуальной темы
+  $subjectID = '';
+  $subjectTilte = '';
   /**
    * Получаем массив занятий
    */
-  fetch(query.subjects($courseID))
+  fetch(api.subjects($courseID))
     .then(r=>r.json())
     .then(r=>{
         subjects = r.items.map(item=>{
                     //расширяем урок свойством active для отображения активного элемента
                     item.active = false
                     return item
-               })
+               }).filter(item=>!item.hide)
     })
 }
 
@@ -50,7 +59,7 @@ function selectSubject(item, index){
   /**
    * Получаем массив заметок
    */
-  fetch(query.workbooks($subjectID, $player))
+  fetch(api.workbooks($subjectID, $player))
   .then(r=>r.json())
   .then(r=>{
       $notes = r.items
@@ -91,11 +100,11 @@ function selectSubject(item, index){
 
 }
 .left{
-
+  border-radius: 0 0 0 4px;
 }
 
 .right{
-
+  border-radius: 0 0 4px 0;
 }
 
 

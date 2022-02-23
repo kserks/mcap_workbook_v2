@@ -12,20 +12,21 @@ function changeScreen(){
 
 $:title = `${$courseID} / ${$subjectID}`
 
+
 </script>
 
 <div class="component">
   <div class="lesson" on:click={changeScreen}>{title}</div>
   <div class="theme">
-      <div>{$courseTitle}</div>
-      <div>{$subjectTilte}</div>
+      <div style="color: darkcyan;">{$courseTitle}</div>
+      <div style="color: cadetblue;">{$subjectTilte}</div>
   </div>
 </div>
 
 <style scoped>
 
 .component{
-  padding: 5px;
+
   display: flex;
   align-items: center;
   height: 7%;
@@ -35,25 +36,26 @@ $:title = `${$courseID} / ${$subjectID}`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding: 5px;
+  padding: 10px;
 }
 .lesson{
-  padding: 5px;
+
   width: 35%;
-  background-color: purple;
-  border-radius: 4px;
+  background-color: cadetblue;
+  border-radius: 4px 0 0 0;
   cursor: pointer;
-  color: wheat;
+  color: lightblue;
+
 }
 .lesson:hover{
-  background-color: crimson;
+  background-color: darkcyan;
 }
 .theme{
-  background-color: green;
-  border-radius: 4px;
+  background-color: #334;
+  /*border-radius: 4px;*/
   width: 65%;
-  margin-left: 5px;
-
+  /*margin-left: 5px;*/
+  border-radius: 0 4px 0 0;
 }
 .theme>div{
   height: 50%;

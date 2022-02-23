@@ -8,7 +8,7 @@ export let courseTitle = writable('')
 export let subjectTilte = writable('')
 
 export let notes = writable([])
-export let player = writable('mcap_serg')
+export let player = writable('')
 
 
 let noteDefault = {
@@ -26,3 +26,6 @@ let noteDefault = {
   subject: ""  
 }
 export let note = writable(noteDefault)
+
+export let screenID = writable('NoteView')
+export let isNew = writable(false)
