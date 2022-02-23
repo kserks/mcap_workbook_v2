@@ -5,8 +5,12 @@ import api from '../../utils/api.js';
 import NoteView from './NoteView.svelte';
 import NoteEdit from './NoteEdit.svelte';
 import base64 from '../../utils/base64.js';
-
-
+import getLinkout from '../../utils/get-linkout.js';
+/**
+ * SCREENS
+ */
+const _content = { NoteView, NoteEdit };
+//maxNotes
 
 async function createNote (){
   $note.id = uid();
@@ -16,17 +20,20 @@ async function createNote (){
   $note.order = +$note.order;
   //$note.name = $note.name;
   $note.content = base64.encode($note.content);
+  let maxRes = await fetch(api.maxNotes($player));
+  let max = await maxRes.json();
 
-
-  $screenID = 'NoteView';
+  $note.linkout = getLinkout($player, max.aggregations[0].value)
+  
   try{
       await fetch(api.addNote, {
         method: 'POST',
         mode: 'no-cors',
         body: JSON.stringify($note)
       })
+      $note.active = true;
       $notes = [...$notes, $note]
-
+      $screenID = 'NoteView';
   }
   catch(e){
     console.error(e)
@@ -43,8 +50,10 @@ async function editNote (){
 
   if($screenID==='NoteEdit'){
         $screenID = 'NoteView'
+        console.log($note.content)
         $note.content = base64.encode($note.content)
         let obj = { ...$note }
+        console.log($note)
         delete obj.active
         try{ 
           await fetch(api.put, {
@@ -52,28 +61,45 @@ async function editNote (){
                     mode: 'cors',
                     body: JSON.stringify(obj)
                 })
-          console.log($note)
+          /**
+           * Получаем список заметок повторно из базы
+           */
+
+            fetch(api.workbooks($subjectID, $player))
+              .then(r=>r.json())
+              .then(r=>{
+                  r.items.map( (n, i)=>{
+                      n.active = false;
+                  })
+                  $notes = r.items
+              })
+
         }
         catch(e){
           console.error(e)
         }  
   }
   else {
-     $screenID = 'NoteEdit'
+     $screenID = 'NoteEdit';
   }
 
 }
-function save (){
+function saveNote (){
   if($isNew){
-      $isNew = false
+      $isNew = false;
       createNote ();
   }
   else{
-     editNote()
+     editNote();
   }
 }
 
-const _content = { NoteView, NoteEdit }
+
+
+function hideNote (){
+
+}
+
 
 </script>
 
@@ -81,9 +107,9 @@ const _content = { NoteView, NoteEdit }
 
   <svelte:component this={_content[$screenID]}/>
   <div class="content__control">
-      <div class="btn">Скрыть</div>
+      <div class="btn" on:click={hideNote}>Скрыть</div>
       <div class="btn">Востановить</div>
-      <div class="btn" on:click={save}>{$screenID==='NoteView'?'Изменить':'Сохранить'}</div>
+      <div class="btn" on:click={saveNote}>{$screenID==='NoteView'?'Изменить':'Сохранить'}</div>
       <div class="btn mark">{$note.mark===0?'':$note.mark}</div>
   </div>
 </div>

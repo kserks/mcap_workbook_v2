@@ -6,6 +6,7 @@ import base64 from '../../utils/base64.js'
 
 
 $:content = (()=>{
+
   let md = base64.decode($note.content)
   return marked.parse(md)
 })()
@@ -47,5 +48,6 @@ $:content = (()=>{
   background-color: rgba(0, 0, 0, 0.1);
   word-break: break-word;
   padding: 5px;
+  overflow: auto;
 }
 </style>

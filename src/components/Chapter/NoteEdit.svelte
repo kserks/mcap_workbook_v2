@@ -1,6 +1,7 @@
 <script>
 import { note, notes, isNew } from '../../store/common.js'
 import base64 from '../../utils/base64.js'
+import { onMount } from 'svelte'
 
 
 
@@ -17,7 +18,6 @@ const orderInput = (e) => {
   $note.order = order
 };
 
-
 let title = $note.name;
 const titleInput = (e) => {
   let val = e.target.value;
@@ -29,23 +29,20 @@ const titleInput = (e) => {
   $note.name = title;
 };
 
-
-
 let content = base64.decode($note.content);
+/*
+if(base64.decode($note.content)!==content)
+
+*/
 const contentInput = (e) => {
   let val = e.target.value;
-  if(val.length>68){
-    val = '';
-  }
-
   content = val;
-  //$note.content = content;
+  $note.content = content;
 };
 
 
 
-//   console.log(base64.encode(md) )
-//$note.content = content
+
 
 </script>
 

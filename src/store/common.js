@@ -29,3 +29,4 @@ export let note = writable(noteDefault)
 
 export let screenID = writable('NoteView')
 export let isNew = writable(false)
+

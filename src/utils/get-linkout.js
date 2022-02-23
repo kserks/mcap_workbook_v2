@@ -5,7 +5,7 @@ function getRandom() {
 }
 
 
-export default function (index){
+export default function (player, index){
   let ab = chars[ getRandom() ]+chars[ getRandom() ]
-  return `${Player.getName()}:${ab}-${index}`
+  return `${player}:${ab}-${index}`
 }

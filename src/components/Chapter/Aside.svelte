@@ -3,9 +3,30 @@ import { notes, note, screenID } from '../../store/common.js'
 import Control from './Control.svelte'
 
 
+const defaultObj = {
+  "id": "",
+  "player": "",
+  "subject": "",
+  "index": 1,
+  "order": '',
+  "name": "",
+  "content": "",
+  "linkin": "",
+  "linkout": "",
+  "mark": 0,
+  "remark": "",
+  "hide": false
+}
+
+$note = defaultObj;
+
+
+
 function selectNote (item, index){
+
   $note = item;
-  $notes.forEach(item=>item.active = false);
+  console.log($note)
+  $notes.map( (item, index)=>$notes[index].active = false);
   $notes[index].active = true;
   $screenID = 'NoteView';
 }
