@@ -79,6 +79,10 @@ function getSharedNote (){
 
  
 };
+
+
+
+
 </script>
 
 <div class="component">

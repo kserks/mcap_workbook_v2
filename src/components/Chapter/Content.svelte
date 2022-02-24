@@ -16,23 +16,24 @@ let success = false;
  */
 $:order = $note.order;
 $:name = $note.name;
-$:content = base64.decode($note.content);
+$:content = $note.content;
 
 
 async function createNote (){
   $note.id = uid();
   $note.player = $player;
   $note.subject = $subjectID;
-  $note.index = 3; /**/
+ /**/
   $note.order = +$note.order;
   //$note.name = $note.name;
   console.log($note.content)
   //console.log(base64.encode($note.content))
-  //$note.content = base64.encode($note.content);
+  $note.content = base64.encode($editedContent)
   let maxRes = await fetch(api.maxNotes($player));
   let max = await maxRes.json();
-
-  $note.linkout = getLinkout($player, max.aggregations[0].value+1)
+  let maxIndex = max.aggregations[0].value+1;
+  $note.index =  maxIndex
+  $note.linkout = getLinkout($player, maxIndex)
   
   try{
       await fetch(api.addNote, {
@@ -63,7 +64,6 @@ async function editNote (){
         $screenID = 'NoteView'
         $note.content = base64.encode($editedContent)
         let obj = { ...$note }
-        console.log($note)
         delete obj.active
         try{ 
           await fetch(api.put, {
@@ -81,7 +81,7 @@ async function editNote (){
                   r.items.map( (n, i)=>{
                       n.active = false;
                   })
-                  $notes = r.item.map(i=>i.active=false);
+                  $notes = r.items;
                   success = true;
                   setTimeout(()=>success=false, 1500);
                   $notes[$currentNoteIndex].active = true
@@ -134,7 +134,49 @@ async function hideNote (){
 
   } 
 }
+async function restoreNote (){
 
+ // mcap_slipers:fd-2
+  let linkin = $note.linkin;
+
+  //$currentNoteIndex = 
+  if(linkin==='') return;
+        try{
+              // удаляем текующую заметку
+              await fetch(api.deleteNote($note.id));
+              // получаем оригинальную заметку
+              let res = await fetch(api.linkout(linkin));
+              let _originalNoteItems = await res.json();
+              let _originalNote = _originalNoteItems.items[0]
+
+              _originalNote.id = uid();
+              _originalNote.player = $player
+              _originalNote.linkin = _originalNote.linkout
+              // получаем максимальный индекс
+              let maxRes = await fetch(api.maxNotes($player));
+              let max = await maxRes.json();
+              let maxIndex = max.aggregations[0].value+1;
+              _originalNote.index  = maxIndex
+              _originalNote.linkout = getLinkout($player, maxIndex)
+              // создаем новую заметку
+              await fetch(api.addNote, {
+                  method: 'POST',
+                  mode: 'no-cors',
+                  body: JSON.stringify(_originalNote)
+              })
+              // получаем список заметок
+              let resNotes = await fetch(api.workbooks($subjectID, $player))
+              let _notes = await resNotes.json()
+              $notes = _notes.items
+              order = '';
+              name = '';
+              content = ''
+
+        }
+        catch(e){
+              console.error(e);
+        }
+}
 
 </script>
 
@@ -143,7 +185,7 @@ async function hideNote (){
   <svelte:component this={_content[$screenID]} order={order} name={name} content={content}/>
   <div class="content__control">
       <div class="btn" on:click={hideNote}>Скрыть</div>
-      <div class="btn">Востановить</div>
+      <div class="btn" on:click={restoreNote}>Востановить</div>
       <div class="btn {success?'success':''}" on:click={saveNote}>{$screenID==='NoteView'?'Изменить':'Сохранить'}</div>
       <div class="btn mark">{$note.mark===0?'':$note.mark}{$note.remark===''?'':$note.remark}</div>
   </div>

@@ -9,7 +9,7 @@ export let order
 export let name
 export let content
 
-
+$:mdContent = marked.parse(base64.decode(content))
 </script>
 
 
@@ -18,7 +18,7 @@ export let content
     <div class="content__title">{name}</div>
   </div>
 
-  <div class="content__markdown">{@html marked.parse(content)}</div>
+  <div class="content__markdown">{@html mdContent}</div>
 
 
 <style scoped>

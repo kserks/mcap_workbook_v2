@@ -10,6 +10,8 @@ export let order
 export let name
 export let content
 
+$editedContent = base64.decode(content)
+
 //let order = $note.order;
 const orderInput = (e) => {
   let val = e.target.value;
@@ -52,7 +54,7 @@ const contentInput = (e) => {
   <input type="text" bind:value="{order}" class="content__index" on:input={orderInput}/>
   <input type="text" bind:value="{name}" class="content__name" on:input={nameInput}/>
 </div>
-<textarea class="content__markdown" bind:value="{content}" on:input={contentInput}></textarea>
+<textarea class="content__markdown" bind:value="{$editedContent}" on:input={contentInput}></textarea>
 
 
 <style>

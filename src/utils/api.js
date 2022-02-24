@@ -26,5 +26,8 @@ export default {
   },
   maxNotes: player=>{
     return `${baseUrl}/mcap_learn/query?q=select%20max%28index%29%20from%20workbooks%20where%20player%3D%22${player}%22`
+  },
+  deleteNote: id=>{
+    return `${baseUrl}/mcap_learn/query?q=DELETE%20FROM%20workbooks%20where%20id%3D%22${id}%22`
   }
 }
