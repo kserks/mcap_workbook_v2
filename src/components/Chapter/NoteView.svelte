@@ -3,22 +3,22 @@ import { note } from '../../store/common.js'
 
 import marked from '../../utils/marked.js'
 import base64 from '../../utils/base64.js'
+import { onMount } from 'svelte'
 
+export let order
+export let name
+export let content
 
-$:content = (()=>{
-
-  let md = base64.decode($note.content)
-  return marked.parse(md)
-})()
 
 </script>
 
 
   <div class="content__header">
-    <div class="content__index">{$note.order}</div>
-    <div class="content__title">{$note.name}</div>
+    <div class="content__index">{order}</div>
+    <div class="content__title">{name}</div>
   </div>
-  <div class="content__markdown">{@html content}</div>
+
+  <div class="content__markdown">{@html marked.parse(content)}</div>
 
 
 <style scoped>

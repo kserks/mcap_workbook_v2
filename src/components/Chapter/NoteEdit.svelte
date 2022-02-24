@@ -1,11 +1,16 @@
 <script>
-import { note, notes, isNew } from '../../store/common.js'
+import { note, notes, isNew, editedContent } from '../../store/common.js'
 import base64 from '../../utils/base64.js'
-import { onMount } from 'svelte'
 
 
+/**
+ * props
+ */
+export let order
+export let name
+export let content
 
-let order = $note.order;
+//let order = $note.order;
 const orderInput = (e) => {
   let val = e.target.value;
   if(val.length>2){
@@ -14,34 +19,29 @@ const orderInput = (e) => {
   if(isNaN(Number(val) )){
     val = '';
   }
-  order = val
-  $note.order = order
+  order = val;
+  $note.order = order;
 };
 
-let title = $note.name;
-const titleInput = (e) => {
+//let name = $note.name;
+const nameInput = (e) => {
   let val = e.target.value;
   if(val.length>68){
     val = '';
   }
 
-  title = val;
-  $note.name = title;
+  name = val;
+  $note.name = name;
 };
 
-let content = base64.decode($note.content);
-/*
-if(base64.decode($note.content)!==content)
+//let content2 = base64.decode(content);
 
-*/
+
 const contentInput = (e) => {
   let val = e.target.value;
-  content = val;
-  $note.content = content;
+
+  $editedContent = val;
 };
-
-
-
 
 
 </script>
@@ -50,12 +50,12 @@ const contentInput = (e) => {
 
 <div class="content__header">
   <input type="text" bind:value="{order}" class="content__index" on:input={orderInput}/>
-  <input type="text" bind:value="{title}" class="content__title" on:input={titleInput}/>
+  <input type="text" bind:value="{name}" class="content__name" on:input={nameInput}/>
 </div>
 <textarea class="content__markdown" bind:value="{content}" on:input={contentInput}></textarea>
 
 
-<style scoped>
+<style>
 textarea{
   resize: none;
   outline: 0;
@@ -81,7 +81,7 @@ input{
   text-align: center;
 
 }
-.content__title{
+.content__name{
   margin-left: 5px;
   flex: 1 1 auto;
   padding-left: 10px;

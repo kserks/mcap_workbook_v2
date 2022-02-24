@@ -12,7 +12,7 @@ export default {
   },
 
   workbooks: (subject, player)=>{
-    return  `${baseUrl}/mcap_learn/query?q=select%20%2a%20from%20workbooks%20where%20subject%3D%22${subject}%22%20and%20player%3D%22${player}%22`
+    return  `${baseUrl}/mcap_learn/query?q=select%20%2a%20from%20workbooks%20where%20subject%3D%22${subject}%22%20and%20player%3D%22${player}%22%20and%20hide%3D%22false%22`
   },
   updateNote: (id, obj)=>{
     let data = objToUrl(obj)
@@ -26,5 +26,5 @@ export default {
   },
   maxNotes: player=>{
     return `${baseUrl}/mcap_learn/query?q=select%20max%28index%29%20from%20workbooks%20where%20player%3D%22${player}%22`
-  },
+  }
 }

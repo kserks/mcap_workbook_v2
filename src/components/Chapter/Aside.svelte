@@ -1,6 +1,6 @@
 <script>
-import { notes, note, screenID } from '../../store/common.js'
-import Control from './Control.svelte'
+import { notes, note, screenID, currentNoteIndex } from '../../store/common.js'
+import Control from './AsideControl.svelte'
 
 
 const defaultObj = {
@@ -23,11 +23,13 @@ $note = defaultObj;
 
 
 function selectNote (item, index){
-
+  $currentNoteIndex = index
   $note = item;
-  console.log($note)
+  // снимаем выделение с активного элемента списка
   $notes.map( (item, index)=>$notes[index].active = false);
+  //задаем выделение активному элементу списка
   $notes[index].active = true;
+  //переключаемся компонент просмотра заметки
   $screenID = 'NoteView';
 }
 

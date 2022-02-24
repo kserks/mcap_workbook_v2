@@ -33,24 +33,47 @@ function shareLink (){
   console.log(linkout)
 };
 
-let targetLink = ''
+/**
+ * Списать заметку
+ */
+let success = false;
+let targetLink = '';
 function getSharedNote (){
   
   let isExists = $notes.find(item=>item.linkin===targetLink);
-  if(!isExists){
+  let isMyLink = $notes.find(item=>item.linkout===targetLink);
+  if(!isExists&&!isMyLink){
 
     fetch(api.linkout(targetLink))
       .then(r=>r.json())
       .then(async r=>{
           let obj = r.items[0];
           obj.id = uid();
-          obj.player = $player
-          await fetch(api.addNote, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(obj)
-          })
-          $notes = [...$notes, obj]
+          obj.player = $player;
+          // get max index
+          let maxRes = await fetch(api.maxNotes($player));
+          let max = await maxRes.json();
+          let _max = max.aggregations[0].value;
+          obj.linkin = obj.linkout;
+          obj.linkout =  getLinkout($player, _max+1);
+          obj.index = _max+1;
+          // добавляем заметку
+          try{
+              await fetch(api.addNote, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(obj)
+              })
+              targetLink = '';
+              $notes = [...$notes, obj]
+              // красим кнопку в зеленый
+              success = true;
+              setTimeout(()=>success=false, 1500);
+              $notes.map(i=>i.active=false)
+          }
+          catch(e){
+            console.error(e)
+          }
       })
   }
 
@@ -61,7 +84,7 @@ function getSharedNote (){
 <div class="component">
   <div class="item">
       <input type="text" placeholder="ссылка" bind:value="{targetLink}">
-      <div class="btn" on:click={getSharedNote}>Дай списать</div>
+      <div class="btn {success?'success':''}" on:click={getSharedNote}>Дай списать</div>
   </div>
   <div class="item">
       <input type="text" placeholder="* или Имя" bind:value="{targetPlayer}">
@@ -94,4 +117,6 @@ input{
   width: 49%;
   color: wheat;
 }
+
+
 </style>

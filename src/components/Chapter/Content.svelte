@@ -1,5 +1,5 @@
 <script>
-import { notes, note, screenID, isNew, subjectID, player } from '../../store/common.js';
+import { notes, note, screenID, isNew, subjectID, player, currentNoteIndex, editedContent } from '../../store/common.js';
 import uid from '../../utils/uid.js';
 import api from '../../utils/api.js';
 import NoteView from './NoteView.svelte';
@@ -10,7 +10,14 @@ import getLinkout from '../../utils/get-linkout.js';
  * SCREENS
  */
 const _content = { NoteView, NoteEdit };
-//maxNotes
+let success = false;
+/**
+ * props
+ */
+$:order = $note.order;
+$:name = $note.name;
+$:content = base64.decode($note.content);
+
 
 async function createNote (){
   $note.id = uid();
@@ -19,11 +26,13 @@ async function createNote (){
   $note.index = 3; /**/
   $note.order = +$note.order;
   //$note.name = $note.name;
-  $note.content = base64.encode($note.content);
+  console.log($note.content)
+  //console.log(base64.encode($note.content))
+  //$note.content = base64.encode($note.content);
   let maxRes = await fetch(api.maxNotes($player));
   let max = await maxRes.json();
 
-  $note.linkout = getLinkout($player, max.aggregations[0].value)
+  $note.linkout = getLinkout($player, max.aggregations[0].value+1)
   
   try{
       await fetch(api.addNote, {
@@ -34,6 +43,8 @@ async function createNote (){
       $note.active = true;
       $notes = [...$notes, $note]
       $screenID = 'NoteView';
+      success = true;
+      setTimeout(()=>success=false, 1500)
   }
   catch(e){
     console.error(e)
@@ -50,8 +61,7 @@ async function editNote (){
 
   if($screenID==='NoteEdit'){
         $screenID = 'NoteView'
-        console.log($note.content)
-        $note.content = base64.encode($note.content)
+        $note.content = base64.encode($editedContent)
         let obj = { ...$note }
         console.log($note)
         delete obj.active
@@ -71,7 +81,10 @@ async function editNote (){
                   r.items.map( (n, i)=>{
                       n.active = false;
                   })
-                  $notes = r.items
+                  $notes = r.item.map(i=>i.active=false);
+                  success = true;
+                  setTimeout(()=>success=false, 1500);
+                  $notes[$currentNoteIndex].active = true
               })
 
         }
@@ -96,8 +109,30 @@ function saveNote (){
 
 
 
-function hideNote (){
+async function hideNote (){
+  // не скрывает только что созданную заметку
+  // из за того, что currentNoteIndex 
+  if($currentNoteIndex){    
+        $notes[$currentNoteIndex].hide = true
+        delete $notes[$currentNoteIndex].active
+        try{
+              await fetch(api.put, {
+                          method: 'POST',
+                          mode: 'cors',
+                          body: JSON.stringify($notes[$currentNoteIndex])
+              });
+              let res = await fetch(api.workbooks($subjectID, $player))
+              let _notesData = await res.json()
+              $notes = _notesData.items
+              order = '';
+              name = '';
+              content = '';
+        }
+        catch (e){
+          console.error(e)
+        }
 
+  } 
 }
 
 
@@ -105,12 +140,12 @@ function hideNote (){
 
 <div class="content">
 
-  <svelte:component this={_content[$screenID]}/>
+  <svelte:component this={_content[$screenID]} order={order} name={name} content={content}/>
   <div class="content__control">
       <div class="btn" on:click={hideNote}>Скрыть</div>
       <div class="btn">Востановить</div>
-      <div class="btn" on:click={saveNote}>{$screenID==='NoteView'?'Изменить':'Сохранить'}</div>
-      <div class="btn mark">{$note.mark===0?'':$note.mark}</div>
+      <div class="btn {success?'success':''}" on:click={saveNote}>{$screenID==='NoteView'?'Изменить':'Сохранить'}</div>
+      <div class="btn mark">{$note.mark===0?'':$note.mark}{$note.remark===''?'':$note.remark}</div>
   </div>
 </div>
 
