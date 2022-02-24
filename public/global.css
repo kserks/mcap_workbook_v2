@@ -133,3 +133,7 @@ input{
   background-color: darkcyan;
   color: white;
 }
+
+.focus{
+  background-color: rgba(0, 50, 100, 0.3) !important;
+}

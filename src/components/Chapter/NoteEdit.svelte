@@ -1,8 +1,16 @@
 <script>
-import { note, notes, isNew, editedContent } from '../../store/common.js'
-import base64 from '../../utils/base64.js'
+import { note, notes, isNew, editedContent, focus } from '../../store/common.js'
+import base64 from '../../utils/base64.js';
+import { onMount } from 'svelte';
 
 
+onMount(()=>{
+  /*$focus for minecraft*/
+  $focus.order = false;
+  $focus.name = false;
+  $focus.content = false;
+
+})
 /**
  * props
  */
@@ -11,6 +19,7 @@ export let name
 export let content
 
 $editedContent = base64.decode(content)
+
 
 //let order = $note.order;
 const orderInput = (e) => {
@@ -23,6 +32,8 @@ const orderInput = (e) => {
   }
   order = val;
   $note.order = order;
+  /*$focus for minecraft*/
+
 };
 
 //let name = $note.name;
@@ -31,9 +42,10 @@ const nameInput = (e) => {
   if(val.length>68){
     val = '';
   }
-
   name = val;
   $note.name = name;
+/*$focus for minecraft*/
+
 };
 
 //let content2 = base64.decode(content);
@@ -41,9 +53,11 @@ const nameInput = (e) => {
 
 const contentInput = (e) => {
   let val = e.target.value;
-
   $editedContent = val;
+/*$focus for minecraft*/
+
 };
+
 
 
 </script>
@@ -51,10 +65,10 @@ const contentInput = (e) => {
 
 
 <div class="content__header">
-  <input type="text" bind:value="{order}" class="content__index" on:input={orderInput}/>
-  <input type="text" bind:value="{name}" class="content__name" on:input={nameInput}/>
+  <input type="text" bind:value="{order}" class="content__index {$focus.order?'focus':''}" on:input={orderInput} on:click={()=>{$focus.order = true;$focus.name = false;$focus.content = false;}}/>
+  <input type="text" bind:value="{name}" class="content__name {$focus.name?'focus':''}" on:input={nameInput} on:click={()=>{$focus.name = true;$focus.order = false;$focus.content = false;}}/>
 </div>
-<textarea class="content__markdown" bind:value="{$editedContent}" on:input={contentInput}></textarea>
+<textarea class="content__markdown {$focus.content?'focus':''}" bind:value="{$editedContent}" on:input={contentInput} on:click={()=>{$focus.order = false;$focus.name = false;$focus.content = true;}}></textarea>
 
 
 <style>
@@ -98,6 +112,7 @@ input{
   padding: 5px;
   color: gray;
 }
+
 
 
 </style>

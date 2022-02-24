@@ -19,11 +19,11 @@ let screens = [ Main, Chapter]
 <style>
 
 main{
-  width: 1024px;
-  height: 768px;
+  width: 100vw;
+  height: 100vh;
   background-color: #445;
   border-radius: 5px;
-  padding: 0px;
+  padding: 10px;
 }
 
 

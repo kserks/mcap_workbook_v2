@@ -1,5 +1,5 @@
 <script>
-import { notes, note, screenID, isNew, subjectID, player, currentNoteIndex, editedContent } from '../../store/common.js';
+import { notes, note, screenID, isNew, subjectID, player, currentNoteIndex, editedContent, focus } from '../../store/common.js';
 import uid from '../../utils/uid.js';
 import api from '../../utils/api.js';
 import NoteView from './NoteView.svelte';
@@ -98,6 +98,10 @@ async function editNote (){
 
 }
 function saveNote (){
+  /*focus for minecraft*/
+  focus.order = false;
+  focus.name = false;
+  focus.content = false;
   if($isNew){
       $isNew = false;
       createNote ();
@@ -200,6 +204,7 @@ async function restoreNote (){
   width: 65%;
   height: 100%;
   color: gray;
+  padding-right: 0;
 }
 
 .content__control{

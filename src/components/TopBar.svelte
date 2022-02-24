@@ -64,5 +64,25 @@ $:title = `${$courseID} / ${$subjectID}`
 .theme:hover{
   /*background-color: lightgreen;*/
 }
+@media (min-width: 600px){
+  .theme{
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    align-content: center;
+  }
+}
 
+@media (min-width: 1200px){
+  .theme{
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+
+  }
+}
 </style>

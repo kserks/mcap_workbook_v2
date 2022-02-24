@@ -6,7 +6,6 @@ export default function (){
               persistent: true,
               onSuccess: response=>{
                 let name = JSON.parse(response).name
-
                 resolve(name)
               }
             })

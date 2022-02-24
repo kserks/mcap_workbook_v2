@@ -3,6 +3,20 @@ import {  screenID, isNew, note, notes, player } from '../../store/common.js';
 import getLinkout from '../../utils/get-linkout.js';
 import api from '../../utils/api.js'
 import uid from '../../utils/uid.js';
+import {onMount} from 'svelte';
+
+
+
+/**
+ * focus
+ */
+//let focus_link = false;
+//let focus_share = false;
+
+
+
+
+
 const defaultObj = {
   "id": "",
   "player": "",
@@ -30,7 +44,8 @@ let targetPlayer = '';
 
 function shareLink (){
   let linkout = getLinkout($player, 3);
-  console.log(linkout)
+  //focus_link = false;
+  //focus_share = false;
 };
 
 /**
@@ -39,7 +54,9 @@ function shareLink (){
 let success = false;
 let targetLink = '';
 function getSharedNote (){
-  
+  /*focus*/
+  //focus_link = false;
+  //focus_share = false;
   let isExists = $notes.find(item=>item.linkin===targetLink);
   let isMyLink = $notes.find(item=>item.linkout===targetLink);
   if(!isExists&&!isMyLink){
@@ -69,7 +86,8 @@ function getSharedNote (){
               // красим кнопку в зеленый
               success = true;
               setTimeout(()=>success=false, 1500);
-              $notes.map(i=>i.active=false)
+              $notes.map(i=>i.active=false);
+
           }
           catch(e){
             console.error(e)
@@ -87,11 +105,11 @@ function getSharedNote (){
 
 <div class="component">
   <div class="item">
-      <input type="text" placeholder="ссылка" bind:value="{targetLink}">
-      <div class="btn {success?'success':''}" on:click={getSharedNote}>Дай списать</div>
+      <input type="text" placeholder="ссылка" bind:value="{targetLink}" />
+      <div class="btn {success?'success':''} " on:click={getSharedNote}>Дай списать</div>
   </div>
   <div class="item">
-      <input type="text" placeholder="* или Имя" bind:value="{targetPlayer}">
+      <input type="text" placeholder="* или Имя" bind:value="{targetPlayer}"/>
       <div class="btn" on:click={shareLink}>Кинуть ссылку</div>
   </div>
   <div class="btn new" on:click={createNote}>Новая</div>

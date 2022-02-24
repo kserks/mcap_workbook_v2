@@ -31,3 +31,8 @@ export let screenID = writable('NoteView');
 export let isNew = writable(false);
 export let currentNoteIndex = writable(null)
 export let editedContent = writable('')
+export let focus = writable({
+  order: false,
+  name: false,
+  content: false
+})
