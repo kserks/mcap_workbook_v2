@@ -4,7 +4,10 @@ import Main from './components/Main/Index.svelte'
 import Chapter from './components/Chapter/Index.svelte'
 import { screenIndex } from './store/common.js'
 
+
+
 let screens = [ Main, Chapter]
+
 
 </script>
 

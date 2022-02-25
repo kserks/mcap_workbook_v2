@@ -4,7 +4,7 @@ import getLinkout from '../../utils/get-linkout.js';
 import api from '../../utils/api.js'
 import uid from '../../utils/uid.js';
 import {onMount} from 'svelte';
-
+import mcefQuery from '../../methods/mcef-query.js';
 
 
 /**
@@ -42,10 +42,34 @@ function createNote (){
 
 let targetPlayer = '';
 
-function shareLink (){
-  let linkout = getLinkout($player, 3);
-  //focus_link = false;
-  //focus_share = false;
+async function shareLink (){
+
+  if($note.linkout==='') return;
+  let body;
+  if(targetPlayer==='*'){
+      body = `CMD_{
+        "action": "command_say",
+        "data": "${$note.linkout}",
+        "type": "player",
+        "dts": 1644914843,
+        "ars": true 
+      }`
+  }
+  else if(targetPlayer!=''){
+      body = `CMD_{
+        "action": "command_msg",
+        "data": "${$note.linkout}",
+        "type": "player",
+        "dts": 1644914843,
+        "ars": true 
+      }`
+  }
+  else{
+    return;
+  }
+  targetPlayer = '';
+  await mcefQuery(body);
+
 };
 
 /**
